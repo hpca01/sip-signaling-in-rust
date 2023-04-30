@@ -1,21 +1,21 @@
-use std::default;
-
 use rsip::prelude::*;
-use std::net::TcpStream;
 use std::io::prelude::*;
+use std::net::TcpStream;
 
 fn main() {
-    let mut connection = TcpStream::connect("192.168.0.109:5060");
-    let request = generate_register_request("192.168.0.1005:4000", "Hiren", "Bob", "192.168.0.1005:5000");
+    let request =
+        generate_register_request("192.168.0.1005:4000", "Hiren", "Bob", "192.168.0.1005:5000");
+    let mut connection =
+        TcpStream::connect("192.168.0.109:5060").expect("Could not connect to 192.168.0.109:5060");
 
-    match connection{
-        //TODO: Convert struct to grpc format or Serde?
-        Ok(conn) => println!("Connection succeeded"),
-        Err(e)=>println!("Couldn't connect to 192.168.0.109:5060\n {:?}",e)
-    }
+    //sending string as bytes for now
+    match connection.write(request.to_string().as_bytes()){
+        Ok(bytes)=>println!("Sent {} bytes", bytes),
+        Err(e)=>println!("Error with data transmission {:#?}",e)
+    };
     println!("{}", request);
 }
-fn generate_register_request(host: &str, from: &str, to: &str, client:&str) -> rsip::SipMessage {
+fn generate_register_request(host: &str, from: &str, to: &str, client: &str) -> rsip::SipMessage {
     let mut headers: rsip::Headers = Default::default();
 
     let base_uri = rsip::Uri {
