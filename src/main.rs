@@ -1,9 +1,18 @@
 use std::default;
 
 use rsip::prelude::*;
+use std::net::TcpStream;
+use std::io::prelude::*;
 
 fn main() {
+    let mut connection = TcpStream::connect("192.168.0.109:5060");
     let request = generate_register_request("192.168.0.1005:4000", "Hiren", "Bob", "192.168.0.1005:5000");
+
+    match connection{
+        //TODO: Convert struct to grpc format or Serde?
+        Ok(conn) => println!("Connection succeeded"),
+        Err(e)=>println!("Couldn't connect to 192.168.0.109:5060\n {:?}",e)
+    }
     println!("{}", request);
 }
 fn generate_register_request(host: &str, from: &str, to: &str, client:&str) -> rsip::SipMessage {
