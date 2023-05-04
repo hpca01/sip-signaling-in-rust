@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 rsip="0.4.0"
+bincode="1.3.3"

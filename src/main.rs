@@ -1,7 +1,5 @@
-use rsip::prelude::*;
 use std::io::prelude::*;
 use std::net::TcpStream;
-
 fn main() {
     let request =
         generate_register_request("192.168.0.1005:4000", "Hiren", "Bob", "192.168.0.1005:5000");
@@ -81,7 +79,7 @@ fn generate_register_request(host: &str, from: &str, to: &str, client: &str) -> 
             ..Default::default()
         },
         version: rsip::Version::V2,
-        headers: headers,
+        headers,
         body: Default::default(),
     }
     .into()
